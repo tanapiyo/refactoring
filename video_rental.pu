@@ -1,0 +1,30 @@
+@startuml
+
+title ビデオレンタル
+
+package main {
+    object main {
+    }
+}
+
+package video_rental {
+   
+    class Movie {
+        print_code: int
+    }
+
+    class Rental {
+        days_rented: int
+    }
+
+    class Customer {
+        statement(): str
+    }
+}
+
+main -right->Customer
+Customer "1" o--right--> "*" Rental
+Rental "*" o--right--> "1" Movie
+
+
+@enduml
