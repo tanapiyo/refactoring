@@ -1,15 +1,18 @@
 import os
+from abc import ABCMeta, abstractmethod
 
-
-class Movie:
-
-    CHILDRENDS = 2
-    REGULAR = 0
-    NEW_RELEASE = 1
-
+class Movie(metaclass=ABCMeta):
     def __init__(self, title, price_code):
         self.__title = title
         self.__price_code = price_code
+
+    @abstractmethod
+    def calc_amount(self, days_rented):
+      pass
+    
+    @abstractmethod
+    def add_rental_point(self, days_rented):
+      pass
 
     @property
     def price_code(self):
@@ -23,9 +26,38 @@ class Movie:
     def title(self):
         return self.__title
 
+class RegularMovie(Movie):
+  def calc_amount(self, days_rented):
+      add_amount = 2.0
+      if days_rented > 2:
+          add_amount += (days_rented - 2) * 1.5
+      return add_amount
+  
+  def add_rental_point(self, days_rented):
+    return 1
+
+class ChildrenMovie(Movie):
+  def calc_amount(self, days_rented):
+      add_amount = 1.5
+      if days_rented > 3:
+          add_amount += (days_rented - 3) * 1.5
+      return add_amount
+      
+  
+  def add_rental_point(self, days_rented):
+    return 1
+
+class NewReleaseMovie(Movie):
+  def calc_amount(self, days_rented):
+      return days_rented * 3
+  
+  def add_rental_point(self, days_rented):
+    if days_rented > 1:
+      return 2
+    return 1
+
 
 class Rental:
-
     def __init__(self, movie, days_rented):
         self.__movie = movie
         self.__days_rented = days_rented
@@ -37,6 +69,12 @@ class Rental:
     @property
     def days_rented(self):
         return self.__days_rented
+
+    def add_rental_point(self):
+        return self.movie.add_rental_point(self.days_rented)
+    
+    def calc_amount(self):
+        return self.movie.calc_amount(self.days_rented)
 
 
 class Customer:
@@ -55,34 +93,11 @@ class Customer:
     def name(self):
         return self.__name
     
-    def add_rental_price(self, rental):
-      this_amount = 0.0
-      # 一行ごとに金額を計算
-      if rental.movie.price_code == Movie.REGULAR:
-          this_amount += 2.0
-          if rental.days_rented > 2:
-              this_amount += (rental.days_rented - 2) * 1.5
-      elif rental.movie.price_code == Movie.NEW_RELEASE:
-          this_amount += rental.days_rented * 3
-      elif rental.movie.price_code == Movie.CHILDRENDS:
-          this_amount += 1.5
-          if rental.days_rented > 3:
-              this_amount += (rental.days_rented - 3) * 1.5
-      return this_amount
-    
-    def add_rental_point(self, rental):
-      self.frequent_renter_points += 1
-      # 新作を二日以上借りた場合はボーナスポイント
-      if rental.movie.price_code == Movie.NEW_RELEASE and \
-              rental.days_rented > 1:
-          self.frequent_renter_points += 1
-
-    def statement(self):
+    def calc_status(self):
         rentals = []
         for rental in self.__rentals:
-            this_amount = 0.0
-            this_amount = self.add_rental_price(rental)
-            self.add_rental_point(rental)
+            self.frequent_renter_points += rental.add_rental_point()
+            this_amount = rental.calc_amount()
             self.total_amount += this_amount
             rentals.append({'rental': rental, 'this_amount': this_amount})
         return self.return_result(rentals)

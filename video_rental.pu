@@ -9,22 +9,43 @@ package main {
 
 package video_rental {
    
-    class Movie {
+    abstract Movie {
         print_code: int
+        {abstract} calc_amount(days_rented: int): float
+        {abstract} add_rental_point(days_rented: int): float
+    }
+
+    class RegularMovie {
+        calc_amount(days_rented: int): float
+        add_rental_point(days_rented: int): int
+    }
+    class ChildrensMovie {
+        calc_amount(days_rented: int): float
+        add_rental_point(days_rented: int): int
+    }
+    class NewReleaseMovie {
+        calc_amount(days_rented: int): float
+        add_rental_point(days_rented: int): int
     }
 
     class Rental {
         days_rented: int
+        movie: Movie
+        calc_amount(): int
+        add_rental_point(): int
     }
 
     class Customer {
-        statement(): str
+        calc_status(): str
     }
 }
 
 main -right->Customer
 Customer "1" o--right--> "*" Rental
 Rental "*" o--right--> "1" Movie
+RegularMovie -up-|> Movie
+ChildrensMovie -up-|> Movie
+NewReleaseMovie -up-|> Movie
 
 
 @enduml
