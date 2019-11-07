@@ -7,7 +7,7 @@ from video_rental import Customer
 
 def execute():
     customer = Customer('TestCustomer')
-    customer.add_rental(Rental(ChildrenMovie('child1', 2), 5))
+    customer.add_rental(Rental(ChildrenMovie('child1', 2), 5))# 数字いらなかった（2とか0とか）
     customer.add_rental(Rental(ChildrenMovie('child2', 2), 2))
     customer.add_rental(Rental(RegularMovie('regular', 0), 3))
     customer.add_rental(Rental(NewReleaseMovie('new1', 1), 3))
