@@ -1,0 +1,5 @@
+[SECTION]
+yuki = hyuki@example.com
+tomura = tomura@example.com
+hanako = hanako@example.com
+
