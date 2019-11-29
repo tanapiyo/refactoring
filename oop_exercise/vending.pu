@@ -1,0 +1,45 @@
+@startuml
+
+title ログ
+
+package main {
+    object main {
+    }
+}
+
+package printer {
+
+    class Logger {
+        start(): void
+        log(): void
+        stop(): void
+    }
+
+    Logger o-right-> State
+
+    abstract class State {
+        abstract start(): void
+        abstract log(): void
+        abstract stop(): void
+    }
+
+    class Stopped {
+        start(): void
+        log(): void
+        stop(): void
+    }
+
+    class Logging {
+        start(): void
+        log(): void
+        stop(): void
+    }
+
+    Stopped -up-|> State
+    Logging -up-|> State
+}
+
+main --> Logger
+
+
+@enduml
