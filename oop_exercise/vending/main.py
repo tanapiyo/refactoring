@@ -1,9 +1,10 @@
-from vending import VendingMachine, CoinFactory, KindOfDrink
+from vending import VendingMachine
+from drinks import KindOfDrink
+from coins import Coin100, Coin500
 
 def main():
-  coin_factory = CoinFactory()
-  coin100 = coin_factory.get_one_coin_100()
-  #coin500 = coin_factory.get_one_coin_500()
+  coin100 =Coin100()
+  coin500 = Coin500()
   vending_machine = VendingMachine()
   drink = vending_machine.buy(coin100,KindOfDrink.COKE)
   charge = vending_machine.refund()
